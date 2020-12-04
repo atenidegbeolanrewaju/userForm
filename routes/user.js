@@ -29,7 +29,7 @@ router.post('/', (req, res) => {
             console.log('This is the result '+ result)
             if (result != null) return res.status(400).json('Email already existed, use another')
         })
-        .catch(err => {g
+        .catch(err => {
             res.status(500).send({
                 message: err
         })
