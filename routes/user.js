@@ -16,15 +16,24 @@ router.get('/', (req, res) => {
     
 });
 
-router.post('/', async (req, res) => {
+router.post('/', (req, res) => {
     const { error } = validation(req.body);
     if (error) {
         console.log(error)
         return res.status(400).send(error.details[0].message)
     };
 
-    const emailExist = await User.findOne({email: req.body.email})
-    if (emailExist) return res.status(400).send('Email already exist')
+    User.findOne({email: req.body.email})
+        .exec()
+        .then(result => {
+            console.log('This is the result '+ result)
+            if (result != null) return res.status(400).json('Email already existed, use another')
+        })
+        .catch(err => {g
+            res.status(500).send({
+                message: err
+        })
+    })
  
     const user = new User ({
         name: req.body.name,
@@ -35,6 +44,7 @@ router.post('/', async (req, res) => {
     user.save()
         .then(result => {
             console.log(result)
+            res.status(201).json(result)
         })
         .catch(err => {
             console.log(err)

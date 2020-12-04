@@ -3,10 +3,11 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const port = process.env.PORT || 5050
 const userRoute = require('./routes/user');
-
+const dotenv = require('dotenv');
 const app = express();
 
-mongoose.connect('mongodb://localhost/UserForm', {useNewUrlParser: true, useUnifiedTopology: true})
+dotenv.config();
+mongoose.connect(process.env.DB_CONNECT, {useNewUrlParser: true, useUnifiedTopology: true});
 
 const db = mongoose.connection
     .once ('open', () => {
